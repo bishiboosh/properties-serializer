@@ -1,0 +1,19 @@
+public abstract class io/github/bishiboosh/properties/Properties : kotlinx/serialization/SerialFormat {
+	public static final field Default Lio/github/bishiboosh/properties/Properties$Default;
+	public synthetic fun <init> (Lkotlinx/serialization/modules/SerializersModule;Ljava/lang/Void;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun decodeFromSource (Lkotlinx/io/Source;Lkotlinx/serialization/DeserializationStrategy;)Ljava/lang/Object;
+	public final fun encodeToSink (Lkotlinx/io/Sink;Lkotlinx/serialization/SerializationStrategy;Ljava/lang/Object;)V
+	public fun getSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
+}
+
+public final class io/github/bishiboosh/properties/Properties$Default : io/github/bishiboosh/properties/Properties {
+}
+
+public final class io/github/bishiboosh/properties/PropertiesKt {
+	public static final fun Properties (Lkotlinx/serialization/modules/SerializersModule;)Lio/github/bishiboosh/properties/Properties;
+	public static final fun decodeFromByteArray (Lio/github/bishiboosh/properties/Properties;[BLkotlinx/serialization/DeserializationStrategy;)Ljava/lang/Object;
+	public static final fun decodeFromString (Lio/github/bishiboosh/properties/Properties;Ljava/lang/String;Lkotlinx/serialization/DeserializationStrategy;)Ljava/lang/Object;
+	public static final fun encodeToByteArray (Lio/github/bishiboosh/properties/Properties;Lkotlinx/serialization/SerializationStrategy;Ljava/lang/Object;)[B
+	public static final fun encodeToString (Lio/github/bishiboosh/properties/Properties;Lkotlinx/serialization/SerializationStrategy;Ljava/lang/Object;)Ljava/lang/String;
+}
+
