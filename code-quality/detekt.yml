@@ -1,6 +1,11 @@
 comments:
   DeprecatedBlockTag:
     active: true
+  UndocumentedPublicClass:
+    active: true
+    ignoreDefaultCompanionObject: true
+  UndocumentedPublicFunction:
+    active: true
 
 complexity:
   LongMethod:
@@ -27,6 +32,12 @@ exceptions:
     active: true
   ObjectExtendsThrowable:
     active: true
+
+libraries:
+  LibraryCodeMustSpecifyReturnType:
+    allowOmitUnit: true
+  LibraryEntitiesShouldNotBePublic:
+    active: false
 
 naming:
   InvalidPackageDeclaration:

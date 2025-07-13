@@ -1,0 +1,30 @@
+name: Dependency update check
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Every Sunday at midnight
+  workflow_dispatch:
+
+jobs:
+  checkUpdates:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Setup gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          add-job-summary: 'never'
+      - name: Check updates
+        run: ./gradlew checkDependencyUpdates --stacktrace --no-configuration-cache
+      - name: Update summary
+        run: cat build/reports/dependency-updates.md >> $GITHUB_STEP_SUMMARY
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.configureondemand=true -Dkotlin.incremental=false -Dorg.gradle.project.kotlin.incremental.multiplatform=false -Dorg.gradle.project.kotlin.native.disableCompilerDaemon=true -Dorg.gradle.jvmargs="-Xmx12g -Dfile.encoding=UTF-8"

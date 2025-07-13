@@ -3,6 +3,10 @@
 import com.deezer.caupain.model.StabilityLevelPolicy
 import com.deezer.caupain.model.gradle.GradleStabilityLevel
 import com.deezer.caupain.plugin.DependenciesUpdateTask
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinMultiplatform
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 import org.jetbrains.dokka.gradle.engine.parameters.VisibilityModifier
 
 plugins {
@@ -111,7 +115,32 @@ kotlin {
 }
 
 detekt {
-    config.from(rootProject.layout.projectDirectory.file("code-quality/detekt-core.yml"))
+    config.from(rootProject.layout.projectDirectory.file("code-quality/detekt.yml"))
+}
+
+val mergeDetektReports = tasks.register<ReportMergeTask>("mergeDetektReports") {
+    output = layout.buildDirectory.file("reports/detekt/merged.sarif")
+}
+val detektAll = tasks.register("detektAll") {
+    group = "verification"
+    description = "Run detekt analysis for all targets"
+}
+tasks.withType<Detekt> {
+    if (!name.contains("test", ignoreCase = true)) {
+        detektAll {
+            dependsOn(this@withType)
+        }
+        mergeDetektReports {
+            input.from(this@withType.sarifReportFile)
+        }
+        finalizedBy(mergeDetektReports)
+    }
+    reports.sarif.required = true
+}
+afterEvaluate {
+    tasks.named("check") {
+        dependsOn(detektAll)
+    }
 }
 
 dokka {
@@ -123,6 +152,46 @@ dokka {
 caupain {
     gradleStabilityLevel = GradleStabilityLevel.RC
     showVersionReferences = true
+    outputs {
+        markdown.enabled = true
+    }
+}
+
+mavenPublishing {
+    configure(
+        KotlinMultiplatform(
+            javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
+            sourcesJar = true
+        )
+    )
+    publishToMavenCentral(automaticRelease = true)
+    signAllPublications()
+    pom {
+        name = "Properties serializer"
+        description = "Java Properties format for KotlinX serialization."
+        inceptionYear = "2025"
+        url = "https://github.com/bishiboosh/properties-serializer"
+        licenses {
+            license {
+                name = "The MIT License"
+                url = "https://opensource.org/license/mit"
+                distribution = url
+            }
+        }
+        developers {
+            developer {
+                id = "bishiboosh"
+                name = "Valentin Rocher"
+                url = "https://github.com/bishiboosh"
+            }
+        }
+        scm {
+            url = "https://github.com/bishiboosh/properties-serializer"
+            connection = "scm:git:git://github.com/bishiboosh/properties-serializer.git"
+            developerConnection =
+                "scm:git:ssh://git@github.com:bishiboosh/properties-serializer.git"
+        }
+    }
 }
 
 tasks.withType<DependenciesUpdateTask> {
