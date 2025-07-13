@@ -60,7 +60,7 @@ jobs:
         if: success() || failure()
         with:
           name: check-results-${{ matrix.os }}
-          path: '*/build/test-results/**/TEST-*.xml'
+          path: 'build/test-results/**/TEST-*.xml'
 
   merge-reports:
     runs-on: ubuntu-latest
