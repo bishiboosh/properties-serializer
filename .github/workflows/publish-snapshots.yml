@@ -2,11 +2,11 @@ name: Publish snapshots
 
 on:
   workflow_dispatch:
-#  push:
-#    branches: [ "main" ]
-#    paths-ignore:
-#      - '*.md'
-#      - '*/*.md'
+  push:
+    branches: [ "main" ]
+    paths-ignore:
+      - '*.md'
+      - '*/*.md'
 
 jobs:
   publish:
