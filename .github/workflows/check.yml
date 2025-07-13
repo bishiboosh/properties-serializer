@@ -44,11 +44,11 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
       - name: Check
         run: ./gradlew ${{matrix.TEST_TASK}} --stacktrace --no-configuration-cache
-      - name: Upload SARIF files
-        if: (success() || failure()) && matrix.os == 'ubuntu-latest'
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: build/reports/detekt/merged.sarif
+#      - name: Upload SARIF files
+#        if: (success() || failure()) && matrix.os == 'ubuntu-latest'
+#        uses: github/codeql-action/upload-sarif@v3
+#        with:
+#          sarif_file: build/reports/detekt/merged.sarif
       - name: Test publication
         run: ./gradlew publishToMavenLocal --stacktrace --no-configuration-cache
         if: matrix.os == 'ubuntu-latest' && github.event_name != 'pull_request'
