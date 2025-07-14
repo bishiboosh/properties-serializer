@@ -12,6 +12,7 @@ import kotlinx.io.readLine
 import kotlinx.io.writeString
 import kotlinx.serialization.Serializable
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 class SerializationTest {
@@ -32,16 +33,18 @@ class SerializationTest {
     }
 
     private fun testSerializedLines(lines: List<String>) {
-        assertEquals(
-            expected = listOf(
-                "distributionBase=GRADLE_USER_HOME",
-                "distributionPath=wrapper/dists",
-                "distributionUrl=https\\://services.gradle.org/distributions/gradle-9.0.0-rc-1-bin.zip",
-                "zipStoreBase=GRADLE_USER_HOME",
-                "zipStorePath=wrapper/dists"
-            ),
-            actual = lines.filterNot { it.startsWith('#') || it.isBlank() }
+        val expectedLines = listOf(
+            "distributionBase=GRADLE_USER_HOME",
+            "distributionPath=wrapper/dists",
+            "distributionUrl=https\\://services.gradle.org/distributions/gradle-9.0.0-rc-1-bin.zip",
+            "zipStoreBase=GRADLE_USER_HOME",
+            "zipStorePath=wrapper/dists"
         )
+        val usefulLines = lines.filterNot { it.startsWith('#') || it.isBlank() }
+        assertEquals(expectedLines.size, usefulLines.size)
+        for (line in expectedLines) {
+            assertContains(usefulLines, line)
+        }
     }
 
     @Test

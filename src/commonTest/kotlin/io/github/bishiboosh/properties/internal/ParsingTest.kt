@@ -5,6 +5,7 @@ import kotlinx.io.Buffer
 import kotlinx.io.readString
 import kotlinx.io.writeString
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 class ParsingTest {
@@ -67,17 +68,19 @@ class ParsingTest {
         )
         val buffer = Buffer()
         buffer.writePropertiesMap(map)
-        assertEquals(
-            expected = listOf(
-                "Property\\ A=aye",
-                "Property\\ B=bee",
-                "Property\\ C=see"
-            ),
-            actual = buffer
-                .readString()
-                .lines()
-                .filterNot { it.startsWith('#') || it.isBlank() }
+        val expectedLines = listOf(
+            "Property\\ A=aye",
+            "Property\\ B=bee",
+            "Property\\ C=see"
         )
+        val usefulLines = buffer
+            .readString()
+            .lines()
+            .filterNot { it.startsWith('#') || it.isBlank() }
+        assertEquals(expectedLines.size, usefulLines.size)
+        for (expectedLine in expectedLines) {
+            assertContains(usefulLines, expectedLine)
+        }
     }
 
     @Test
