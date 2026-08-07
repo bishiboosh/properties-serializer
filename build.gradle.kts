@@ -1,20 +1,22 @@
 @file:Suppress("OPT_IN_USAGE")
+@file:OptIn(ExperimentalAbiValidation::class)
 
-import com.deezer.caupain.model.StabilityLevelPolicy
 import com.deezer.caupain.model.gradle.GradleStabilityLevel
 import com.deezer.caupain.plugin.DependenciesUpdateTask
+import com.deezer.caupain.policies.StabilityLevelPolicy
 import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.KotlinMultiplatform
+import com.vanniktech.maven.publish.SourcesJar
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 import org.jetbrains.dokka.gradle.engine.parameters.VisibilityModifier
+import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.dokka)
-    alias(libs.plugins.binary.compatibility.validator)
-    alias(libs.plugins.compat.patrouille)
+    alias(libs.plugins.tapmoc)
     alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.vanniktech.maven.publish)
     alias(libs.plugins.cashapp.burst)
@@ -45,13 +47,14 @@ changelog {
     version.set(currentVersion)
 }
 
-compatPatrouille {
+tapmoc {
     java(17)
     kotlin(libs.versions.kotlin.get())
 }
 
 kotlin {
     explicitApi()
+    abiValidation()
     compilerOptions.freeCompilerArgs.addAll(
         "-Xexpect-actual-classes",
         "-Xwhen-guards"
@@ -75,13 +78,11 @@ kotlin {
         linuxX64()
 
         macosArm64()
-        macosX64()
 
         mingwX64()
 
         tvosArm64()
         tvosSimulatorArm64()
-        tvosX64()
 
         wasmJs().nodejs()
         wasmWasi().nodejs()
@@ -90,7 +91,6 @@ kotlin {
         watchosArm64()
         watchosDeviceArm64()
         watchosSimulatorArm64()
-        watchosX64()
 
         applyDefaultHierarchyTemplate()
 
@@ -110,6 +110,18 @@ kotlin {
                 implementation(libs.kotlin.test.junit)
                 implementation(libs.junit)
             }
+        }
+        val nonJvmMain = create("nonJvmMain") {
+            dependsOn(commonMain.get())
+        }
+        nativeMain {
+            dependsOn(nonJvmMain)
+        }
+        webMain {
+            dependsOn(nonJvmMain)
+        }
+        wasmWasiMain {
+            dependsOn(nonJvmMain)
         }
     }
 }
@@ -157,15 +169,22 @@ caupain {
     }
 }
 
+val fromForkedPullRequest = providers
+    .gradleProperty("fromForkedPullRequest")
+    .map { it.toBoolean() }
+
 mavenPublishing {
     configure(
         KotlinMultiplatform(
             javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
-            sourcesJar = true
+            sourcesJar = SourcesJar.Sources()
         )
     )
     publishToMavenCentral(automaticRelease = true)
-    signAllPublications()
+    if (!fromForkedPullRequest.getOrElse(false)) {
+        // Do not sign if the build is from a forked PR because secrets are not available
+        signAllPublications()
+    }
     pom {
         name = "Properties serializer"
         description = "Java Properties format for KotlinX serialization."
