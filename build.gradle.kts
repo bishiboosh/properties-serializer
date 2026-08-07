@@ -26,7 +26,7 @@ plugins {
 }
 
 group = "io.github.bishiboosh"
-val currentVersion = "1.0.0"
+val currentVersion = "1.1.0"
 
 val isSnapshot = project.findProperty("isSnapshot")?.toString().toBoolean()
 val isRelease = project.findProperty("isRelease")?.toString().toBoolean()
