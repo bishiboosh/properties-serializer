@@ -17,3 +17,16 @@ public final class io/github/bishiboosh/properties/PropertiesKt {
 	public static final fun encodeToString (Lio/github/bishiboosh/properties/Properties;Lkotlinx/serialization/SerializationStrategy;Ljava/lang/Object;)Ljava/lang/String;
 }
 
+public final class io/github/bishiboosh/properties/model/PropertyContainerKt {
+	public static final fun asMap (Ljava/util/Properties;)Ljava/util/Map;
+	public static final fun propertyContainerOf ([Lkotlin/Pair;)Ljava/util/Properties;
+	public static final fun putAll (Ljava/util/Properties;Ljava/util/Properties;)V
+	public static final fun readPropertyContainer (Lkotlinx/io/Source;)Ljava/util/Properties;
+	public static final fun writePropertyContainer (Lkotlinx/io/Sink;Ljava/util/Properties;)V
+}
+
+public final class io/github/bishiboosh/properties/model/PropertyContainerUtils {
+	public static final fun get (Ljava/util/Properties;Ljava/lang/String;)Ljava/lang/String;
+	public static final fun set (Ljava/util/Properties;Ljava/lang/String;Ljava/lang/String;)V
+}
+

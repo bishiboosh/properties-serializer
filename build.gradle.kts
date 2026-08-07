@@ -57,7 +57,6 @@ kotlin {
     abiValidation()
     compilerOptions.freeCompilerArgs.addAll(
         "-Xexpect-actual-classes",
-        "-Xwhen-guards"
     )
 
     sourceSets {

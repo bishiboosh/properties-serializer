@@ -1,0 +1,48 @@
+// Klib ABI Dump
+// Targets: [androidNativeArm32, androidNativeArm64, androidNativeX64, androidNativeX86, iosArm64, iosSimulatorArm64, iosX64, js, linuxArm64, linuxX64, macosArm64, mingwX64, tvosArm64, tvosSimulatorArm64, wasmJs, wasmWasi, watchosArm32, watchosArm64, watchosDeviceArm64, watchosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.bishiboosh:properties-serializer>
+final class io.github.bishiboosh.properties.model/PropertyContainer { // io.github.bishiboosh.properties.model/PropertyContainer|null[0]
+    constructor <init>() // io.github.bishiboosh.properties.model/PropertyContainer.<init>|<init>(){}[0]
+    constructor <init>(kotlin/Int) // io.github.bishiboosh.properties.model/PropertyContainer.<init>|<init>(kotlin.Int){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.bishiboosh.properties.model/PropertyContainer.equals|equals(kotlin.Any?){}[0]
+    final fun getProperty(kotlin/String): kotlin/String? // io.github.bishiboosh.properties.model/PropertyContainer.getProperty|getProperty(kotlin.String){}[0]
+    final fun getProperty(kotlin/String, kotlin/String): kotlin/String // io.github.bishiboosh.properties.model/PropertyContainer.getProperty|getProperty(kotlin.String;kotlin.String){}[0]
+    final fun hashCode(): kotlin/Int // io.github.bishiboosh.properties.model/PropertyContainer.hashCode|hashCode(){}[0]
+    final fun setProperty(kotlin/String, kotlin/String): kotlin/Any? // io.github.bishiboosh.properties.model/PropertyContainer.setProperty|setProperty(kotlin.String;kotlin.String){}[0]
+    final fun stringPropertyNames(): kotlin.collections/Set<kotlin/String> // io.github.bishiboosh.properties.model/PropertyContainer.stringPropertyNames|stringPropertyNames(){}[0]
+}
+
+sealed class io.github.bishiboosh.properties/Properties : kotlinx.serialization/SerialFormat { // io.github.bishiboosh.properties/Properties|null[0]
+    open val serializersModule // io.github.bishiboosh.properties/Properties.serializersModule|{}serializersModule[0]
+        open fun <get-serializersModule>(): kotlinx.serialization.modules/SerializersModule // io.github.bishiboosh.properties/Properties.serializersModule.<get-serializersModule>|<get-serializersModule>(){}[0]
+
+    final fun <#A1: kotlin/Any?> decodeFromSource(kotlinx.io/Source, kotlinx.serialization/DeserializationStrategy<#A1>): #A1 // io.github.bishiboosh.properties/Properties.decodeFromSource|decodeFromSource(kotlinx.io.Source;kotlinx.serialization.DeserializationStrategy<0:0>){0§<kotlin.Any?>}[0]
+    final fun <#A1: kotlin/Any?> encodeToSink(kotlinx.io/Sink, kotlinx.serialization/SerializationStrategy<#A1>, #A1) // io.github.bishiboosh.properties/Properties.encodeToSink|encodeToSink(kotlinx.io.Sink;kotlinx.serialization.SerializationStrategy<0:0>;0:0){0§<kotlin.Any?>}[0]
+
+    final object Default : io.github.bishiboosh.properties/Properties // io.github.bishiboosh.properties/Properties.Default|null[0]
+}
+
+final fun (io.github.bishiboosh.properties.model/PropertyContainer).io.github.bishiboosh.properties.model/asMap(): kotlin.collections/MutableMap<kotlin/String, kotlin/String> // io.github.bishiboosh.properties.model/asMap|asMap@io.github.bishiboosh.properties.model.PropertyContainer(){}[0]
+final fun (io.github.bishiboosh.properties.model/PropertyContainer).io.github.bishiboosh.properties.model/get(kotlin/String): kotlin/String? // io.github.bishiboosh.properties.model/get|get@io.github.bishiboosh.properties.model.PropertyContainer(kotlin.String){}[0]
+final fun (io.github.bishiboosh.properties.model/PropertyContainer).io.github.bishiboosh.properties.model/putAll(io.github.bishiboosh.properties.model/PropertyContainer) // io.github.bishiboosh.properties.model/putAll|putAll@io.github.bishiboosh.properties.model.PropertyContainer(io.github.bishiboosh.properties.model.PropertyContainer){}[0]
+final fun (io.github.bishiboosh.properties.model/PropertyContainer).io.github.bishiboosh.properties.model/set(kotlin/String, kotlin/String) // io.github.bishiboosh.properties.model/set|set@io.github.bishiboosh.properties.model.PropertyContainer(kotlin.String;kotlin.String){}[0]
+final fun (kotlinx.io/Sink).io.github.bishiboosh.properties.model/writePropertyContainer(io.github.bishiboosh.properties.model/PropertyContainer) // io.github.bishiboosh.properties.model/writePropertyContainer|writePropertyContainer@kotlinx.io.Sink(io.github.bishiboosh.properties.model.PropertyContainer){}[0]
+final fun (kotlinx.io/Source).io.github.bishiboosh.properties.model/readPropertyContainer(): io.github.bishiboosh.properties.model/PropertyContainer // io.github.bishiboosh.properties.model/readPropertyContainer|readPropertyContainer@kotlinx.io.Source(){}[0]
+final fun <#A: kotlin/Any?> (io.github.bishiboosh.properties/Properties).io.github.bishiboosh.properties/decodeFromByteArray(kotlin/ByteArray, kotlinx.serialization/DeserializationStrategy<#A>): #A // io.github.bishiboosh.properties/decodeFromByteArray|decodeFromByteArray@io.github.bishiboosh.properties.Properties(kotlin.ByteArray;kotlinx.serialization.DeserializationStrategy<0:0>){0§<kotlin.Any?>}[0]
+final fun <#A: kotlin/Any?> (io.github.bishiboosh.properties/Properties).io.github.bishiboosh.properties/decodeFromString(kotlin/String, kotlinx.serialization/DeserializationStrategy<#A>): #A // io.github.bishiboosh.properties/decodeFromString|decodeFromString@io.github.bishiboosh.properties.Properties(kotlin.String;kotlinx.serialization.DeserializationStrategy<0:0>){0§<kotlin.Any?>}[0]
+final fun <#A: kotlin/Any?> (io.github.bishiboosh.properties/Properties).io.github.bishiboosh.properties/encodeToByteArray(kotlinx.serialization/SerializationStrategy<#A>, #A): kotlin/ByteArray // io.github.bishiboosh.properties/encodeToByteArray|encodeToByteArray@io.github.bishiboosh.properties.Properties(kotlinx.serialization.SerializationStrategy<0:0>;0:0){0§<kotlin.Any?>}[0]
+final fun <#A: kotlin/Any?> (io.github.bishiboosh.properties/Properties).io.github.bishiboosh.properties/encodeToString(kotlinx.serialization/SerializationStrategy<#A>, #A): kotlin/String // io.github.bishiboosh.properties/encodeToString|encodeToString@io.github.bishiboosh.properties.Properties(kotlinx.serialization.SerializationStrategy<0:0>;0:0){0§<kotlin.Any?>}[0]
+final fun io.github.bishiboosh.properties.model/propertyContainerOf(kotlin/Array<out kotlin/Pair<kotlin/String, kotlin/String>>...): io.github.bishiboosh.properties.model/PropertyContainer // io.github.bishiboosh.properties.model/propertyContainerOf|propertyContainerOf(kotlin.Array<out|kotlin.Pair<kotlin.String,kotlin.String>>...){}[0]
+final fun io.github.bishiboosh.properties/Properties(kotlinx.serialization.modules/SerializersModule): io.github.bishiboosh.properties/Properties // io.github.bishiboosh.properties/Properties|Properties(kotlinx.serialization.modules.SerializersModule){}[0]
+final inline fun <#A: reified kotlin/Any?> (io.github.bishiboosh.properties/Properties).io.github.bishiboosh.properties/decodeFromByteArray(kotlin/ByteArray): #A // io.github.bishiboosh.properties/decodeFromByteArray|decodeFromByteArray@io.github.bishiboosh.properties.Properties(kotlin.ByteArray){0§<kotlin.Any?>}[0]
+final inline fun <#A: reified kotlin/Any?> (io.github.bishiboosh.properties/Properties).io.github.bishiboosh.properties/decodeFromSource(kotlinx.io/Source): #A // io.github.bishiboosh.properties/decodeFromSource|decodeFromSource@io.github.bishiboosh.properties.Properties(kotlinx.io.Source){0§<kotlin.Any?>}[0]
+final inline fun <#A: reified kotlin/Any?> (io.github.bishiboosh.properties/Properties).io.github.bishiboosh.properties/decodeFromString(kotlin/String): #A // io.github.bishiboosh.properties/decodeFromString|decodeFromString@io.github.bishiboosh.properties.Properties(kotlin.String){0§<kotlin.Any?>}[0]
+final inline fun <#A: reified kotlin/Any?> (io.github.bishiboosh.properties/Properties).io.github.bishiboosh.properties/encodeToByteArray(#A): kotlin/ByteArray // io.github.bishiboosh.properties/encodeToByteArray|encodeToByteArray@io.github.bishiboosh.properties.Properties(0:0){0§<kotlin.Any?>}[0]
+final inline fun <#A: reified kotlin/Any?> (io.github.bishiboosh.properties/Properties).io.github.bishiboosh.properties/encodeToSink(kotlinx.io/Sink, #A) // io.github.bishiboosh.properties/encodeToSink|encodeToSink@io.github.bishiboosh.properties.Properties(kotlinx.io.Sink;0:0){0§<kotlin.Any?>}[0]
+final inline fun <#A: reified kotlin/Any?> (io.github.bishiboosh.properties/Properties).io.github.bishiboosh.properties/encodeToString(#A): kotlin/String // io.github.bishiboosh.properties/encodeToString|encodeToString@io.github.bishiboosh.properties.Properties(0:0){0§<kotlin.Any?>}[0]

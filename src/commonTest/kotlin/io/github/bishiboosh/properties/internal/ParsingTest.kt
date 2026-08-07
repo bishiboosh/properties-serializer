@@ -1,6 +1,11 @@
 package io.github.bishiboosh.properties.internal
 
 import io.github.bishiboosh.properties.assertThrows
+import io.github.bishiboosh.properties.model.PropertyContainer
+import io.github.bishiboosh.properties.model.get
+import io.github.bishiboosh.properties.model.propertyContainerOf
+import io.github.bishiboosh.properties.model.readPropertyContainer
+import io.github.bishiboosh.properties.model.writePropertyContainer
 import kotlinx.io.Buffer
 import kotlinx.io.readString
 import kotlinx.io.writeString
@@ -10,18 +15,18 @@ import kotlin.test.assertEquals
 
 class ParsingTest {
 
-    private fun read(value: String): Map<String, String> {
-        return Buffer().apply { writeString(value) }.use { it.readPropertiesMap() }
+    private fun read(value: String): PropertyContainer {
+        return Buffer().apply { writeString(value) }.use { it.readPropertyContainer() }
     }
 
     private fun checkValue(expected: String, key: String, source: String) {
-        assertEquals(expected, read(source)[key])
+        assertEquals(expected, read(source).getProperty(key))
     }
 
     @Test
     fun testRead() {
         assertEquals(
-            expected = mapOf(
+            expected = propertyContainerOf(
                 "test.pkg" to "tests",
                 "test.proj" to "Tests"
             ),
@@ -38,36 +43,36 @@ class ParsingTest {
         read("a=\\u1234z")
         assertThrows<IllegalArgumentException> { read("a=\\u123") }
         assertThrows<IllegalArgumentException> { read("a=\\u123z") }
-        assertEquals(mapOf("a" to "q"), read("a=\\q"))
+        assertEquals(propertyContainerOf("a" to "q"), read("a=\\q"))
     }
 
     @Test
     fun testReadComplete() {
-        val map = read(SPECIAL_TEST_PROPERTIES)
-        assertEquals("\n \t \u000c", map[" \r"])
-        assertEquals("a", map["a"])
-        assertEquals("bb as,dn   ", map["b"])
-        assertEquals(":: cu", map["c\r \t\nu"])
-        assertEquals("bu", map["bu"])
-        assertEquals("d\r\ne=e", map["d"])
-        assertEquals("fff", map["f"])
-        assertEquals("g", map["g"])
-        assertEquals("", map["h h"])
-        assertEquals("i=i", map[" "])
-        assertEquals("   j", map["j"])
-        assertEquals("   c", map["space"])
-        assertEquals("\\", map["dblbackslash"])
+        val properties = read(SPECIAL_TEST_PROPERTIES)
+        assertEquals("\n \t \u000c", properties[" \r"])
+        assertEquals("a", properties["a"])
+        assertEquals("bb as,dn   ", properties["b"])
+        assertEquals(":: cu", properties["c\r \t\nu"])
+        assertEquals("bu", properties["bu"])
+        assertEquals("d\r\ne=e", properties["d"])
+        assertEquals("fff", properties["f"])
+        assertEquals("g", properties["g"])
+        assertEquals("", properties["h h"])
+        assertEquals("i=i", properties[" "])
+        assertEquals("   j", properties["j"])
+        assertEquals("   c", properties["space"])
+        assertEquals("\\", properties["dblbackslash"])
     }
 
     @Test
     fun testWrite() {
-        val map = mapOf(
+        val properties = propertyContainerOf(
             "Property A" to "aye",
             "Property B" to "bee",
             "Property C" to "see",
         )
         val buffer = Buffer()
-        buffer.writePropertiesMap(map)
+        buffer.writePropertyContainer(properties)
         val expectedLines = listOf(
             "Property\\ A=aye",
             "Property\\ B=bee",
@@ -85,14 +90,14 @@ class ParsingTest {
 
     @Test
     fun testRoundabout() {
-        val map = mapOf(
+        val properties = propertyContainerOf(
             "Property A" to "aye",
             "Property B" to "bee",
             "Property C" to "see",
         )
         val buffer = Buffer()
-        buffer.writePropertiesMap(map)
-        assertEquals(map, buffer.readPropertiesMap())
+        buffer.writePropertyContainer(properties)
+        assertEquals(properties, buffer.readPropertyContainer())
     }
 
     companion object {

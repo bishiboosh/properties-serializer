@@ -63,7 +63,7 @@ private fun Source.read(): Int {
     "LongMethod",
     "LoopWithTooManyJumpStatements"
 )
-internal fun Source.commonReadPropertiesMap(): Map<String, String> {
+internal fun Source.commonReadPropertiesMap(): MutableMap<String, String> {
     var mode = MODE_NONE
     var unicode = 0
     var count = 0
