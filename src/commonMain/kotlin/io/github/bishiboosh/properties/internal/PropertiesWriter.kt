@@ -47,8 +47,10 @@ import kotlinx.io.writeString
 // Adapted for Apache Harmony
 
 internal fun Sink.commonWritePropertiesMap(properties: Map<String, String>) {
+    val sortedKeys = properties.keys.sorted()
     val buffer = StringBuilder(200)
-    for ((key, value) in properties) {
+    for (key in sortedKeys) {
+        val value = properties[key] ?: continue
         buffer.dumpString(key, true)
         buffer.append('=')
         buffer.dumpString(value, false)

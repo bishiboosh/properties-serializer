@@ -12,9 +12,9 @@ import kotlinx.io.Source
 public actual class PropertyContainer internal constructor(
     internal val map: MutableMap<String, String>,
 ) {
-    public actual constructor() : this(mutableMapOf())
+    public actual constructor() : this(hashMapOf())
 
-    public actual constructor(initialCapacity: Int) : this(LinkedHashMap(initialCapacity))
+    public actual constructor(initialCapacity: Int) : this(HashMap(initialCapacity))
 
     /**
      * Searches for the property with the specified key in this property list. The method returns
@@ -109,6 +109,14 @@ public actual fun Source.readPropertyContainer(): PropertyContainer {
 /**
  * Writes a property container to the given [Sink]. The sink stays open after this function returns,
  * and it is the caller's responsibility to close it when done.
+ *
+ * There are a number of differences compared to how properties are stored in Java's
+ * `Properties.store` method:
+ *  - no timestamp comment is generated at the beginning of the file
+ *  - the properties are sorted alphabetically
+ *
+ *  This is done to ensure consistent output across different platforms and runs,
+ *  which is especially useful for version control and testing.
  */
 public actual fun Sink.writePropertyContainer(propertyContainer: PropertyContainer) {
     commonWritePropertiesMap(propertyContainer.map)

@@ -10,7 +10,6 @@ import kotlinx.io.Buffer
 import kotlinx.io.readString
 import kotlinx.io.writeString
 import kotlin.test.Test
-import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 class ParsingTest {
@@ -68,24 +67,20 @@ class ParsingTest {
     fun testWrite() {
         val properties = propertyContainerOf(
             "Property A" to "aye",
-            "Property B" to "bee",
             "Property C" to "see",
+            "Property B" to "bee",
         )
         val buffer = Buffer()
         buffer.writePropertyContainer(properties)
-        val expectedLines = listOf(
-            "Property\\ A=aye",
-            "Property\\ B=bee",
-            "Property\\ C=see"
+        assertEquals(
+            expected = listOf(
+                "Property\\ A=aye",
+                "Property\\ B=bee",
+                "Property\\ C=see",
+                ""
+            ),
+            actual = buffer.readString().lines()
         )
-        val usefulLines = buffer
-            .readString()
-            .lines()
-            .filterNot { it.startsWith('#') || it.isBlank() }
-        assertEquals(expectedLines.size, usefulLines.size)
-        for (expectedLine in expectedLines) {
-            assertContains(usefulLines, expectedLine)
-        }
     }
 
     @Test

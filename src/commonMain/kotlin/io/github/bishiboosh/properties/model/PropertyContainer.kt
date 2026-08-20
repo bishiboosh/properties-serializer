@@ -102,5 +102,13 @@ public expect fun Source.readPropertyContainer(): PropertyContainer
 /**
  * Writes a property container to the given [Sink]. The sink stays open after this function returns,
  * and it is the caller's responsibility to close it when done.
+ *
+ * There are a number of differences compared to how properties are stored in Java's
+ * `Properties.store` method:
+ *  - no timestamp comment is generated at the beginning of the file
+ *  - the properties are sorted alphabetically
+ *
+ *  This is done to ensure consistent output across different platforms and runs,
+ *  which is especially useful for version control and testing.
  */
 public expect fun Sink.writePropertyContainer(propertyContainer: PropertyContainer)

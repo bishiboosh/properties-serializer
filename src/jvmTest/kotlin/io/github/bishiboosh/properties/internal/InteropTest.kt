@@ -24,6 +24,9 @@
 
 package io.github.bishiboosh.properties.internal
 
+import io.github.bishiboosh.properties.model.asMap
+import io.github.bishiboosh.properties.model.propertyContainerOf
+import io.github.bishiboosh.properties.model.writePropertyContainer
 import kotlinx.io.asSink
 import kotlinx.io.asSource
 import kotlinx.io.buffered
@@ -73,5 +76,28 @@ class InteropTest {
         for ((key, value) in expected) {
             assertEquals(value, properties.getProperty(key))
         }
+    }
+
+    @Test
+    fun testOutputs() {
+        val jvmFile = tempFolder.newFile("jvm.properties")
+        val commonFile = tempFolder.newFile("common.properties")
+        val props = propertyContainerOf(
+            "key1" to "value1",
+            "key2" to "value2",
+            "key4" to "valuéééééé4",
+            "key3" to "value3",
+        )
+        jvmFile
+            .outputStream()
+            .asSink()
+            .buffered()
+            .use { it.writePropertyContainer(props) }
+        commonFile
+            .outputStream()
+            .asSink()
+            .buffered()
+            .use { it.commonWritePropertiesMap(props.asMap()) }
+        assertEquals(expected = commonFile.readText(), actual = jvmFile.readText())
     }
 }

@@ -9,10 +9,10 @@ import io.github.bishiboosh.properties.encodeToSink
 import io.github.bishiboosh.properties.encodeToString
 import kotlinx.io.Buffer
 import kotlinx.io.readLine
+import kotlinx.io.readString
 import kotlinx.io.writeString
 import kotlinx.serialization.Serializable
 import kotlin.test.Test
-import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 class SerializationTest {
@@ -32,21 +32,6 @@ class SerializationTest {
         assertEquals(expected, Properties.decodeFromByteArray(PROPERTIES_FILE.encodeToByteArray()))
     }
 
-    private fun testSerializedLines(lines: List<String>) {
-        val expectedLines = listOf(
-            "distributionBase=GRADLE_USER_HOME",
-            "distributionPath=wrapper/dists",
-            "distributionUrl=https\\://services.gradle.org/distributions/gradle-9.0.0-rc-1-bin.zip",
-            "zipStoreBase=GRADLE_USER_HOME",
-            "zipStorePath=wrapper/dists"
-        )
-        val usefulLines = lines.filterNot { it.startsWith('#') || it.isBlank() }
-        assertEquals(expectedLines.size, usefulLines.size)
-        for (line in expectedLines) {
-            assertContains(usefulLines, line)
-        }
-    }
-
     @Test
     fun testSerialize() {
         val properties = GradleProperties(
@@ -58,15 +43,23 @@ class SerializationTest {
         )
         val sink = Buffer()
         Properties.encodeToSink(sink, properties)
-        var line = sink.readLine()
-        val lines = mutableListOf<String>()
-        while (line != null) {
-            lines.add(line)
-            line = sink.readLine()
-        }
-        testSerializedLines(lines)
-        testSerializedLines(Properties.encodeToString(properties).lines())
-        testSerializedLines(Properties.encodeToByteArray(properties).decodeToString().lines())
+        val expectedLines = listOf(
+            "distributionBase=GRADLE_USER_HOME",
+            "distributionPath=wrapper/dists",
+            "distributionUrl=https\\://services.gradle.org/distributions/gradle-9.0.0-rc-1-bin.zip",
+            "zipStoreBase=GRADLE_USER_HOME",
+            "zipStorePath=wrapper/dists",
+            ""
+        )
+        assertEquals(expectedLines, sink.readString().lines())
+        assertEquals(
+            expected = expectedLines,
+            actual = Properties.encodeToString(properties).lines()
+        )
+        assertEquals(
+            expected = expectedLines,
+            actual = Properties.encodeToByteArray(properties).decodeToString().lines()
+        )
     }
 
     @Serializable
@@ -75,7 +68,7 @@ class SerializationTest {
         val distributionPath: String,
         val distributionUrl: String,
         val zipStoreBase: String,
-        val zipStorePath: String
+        val zipStorePath: String,
     )
 
     companion object {

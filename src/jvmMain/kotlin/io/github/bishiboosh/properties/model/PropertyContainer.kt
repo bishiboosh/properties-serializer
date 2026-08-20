@@ -3,7 +3,9 @@ package io.github.bishiboosh.properties.model
 import kotlinx.io.Sink
 import kotlinx.io.Source
 import kotlinx.io.asInputStream
-import kotlinx.io.asOutputStream
+import kotlinx.io.writeCodePointValue
+import kotlinx.io.writeString
+import java.io.ByteArrayOutputStream
 import java.util.Hashtable
 import java.util.Properties
 
@@ -56,8 +58,36 @@ public actual fun Source.readPropertyContainer(): PropertyContainer = Properties
  * Writes a property container to the given [Sink]. The sink stays open after this function returns,
  * and it is the caller's responsibility to close it when done.
  *
+ * There are a number of differences compared to how properties are stored in Java's
+ * `Properties.store` method:
+ *  - no timestamp comment is generated at the beginning of the file
+ *  - the properties are sorted alphabetically
+ *
+ *  This is done to ensure consistent output across different platforms and runs,
+ *  which is especially useful for version control and testing.
+ *
  * @see Properties.store
  */
 public actual fun Sink.writePropertyContainer(propertyContainer: PropertyContainer) {
-    propertyContainer.store(asOutputStream(), null)
+    val baos = ByteArrayOutputStream()
+    propertyContainer.store(baos, null)
+    val rawContents = String(baos.toByteArray(), Charsets.ISO_8859_1)
+    val lines = rawContents
+        .lineSequence()
+        .filterNot { it.isBlank() }
+        .toMutableList()
+    val lastCommentLine = lines.indexOfLast { it.startsWith('#') }
+    val nonCommentLines = if (lastCommentLine == -1) {
+        lines
+    } else {
+        lines.removeAt(lastCommentLine)
+        lines.subList(lastCommentLine, lines.size)
+    }
+    nonCommentLines.sort()
+    for (line in lines) {
+        writeString(line)
+        writeCodePointValue(LINE_CODE_POINT)
+    }
 }
+
+private const val LINE_CODE_POINT = '\n'.code
