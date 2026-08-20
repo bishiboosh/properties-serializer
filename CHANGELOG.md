@@ -14,6 +14,12 @@
 
 ### Security
 
+## 1.1.1 - 2026-08-20
+
+### Changed
+
+- Harmonized output between common and JVM platforms.
+
 ## 1.1.0 - 2026-08-07
 
 ### Changed
